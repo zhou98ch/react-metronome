@@ -73,6 +73,11 @@ class Metronome extends React.Component {
       tempo: this.props.tempo,
       beatsPerMeasure: this.props.beatsPerMeasure,
       subdivision: this.props.subdivision,
+      startTime: null,
+      elapsedTime:0,
+      totalElapsedTime:0,
+      elapsedTimes: new Map(),
+      totalElapsedTimes: new Map(),
     }
   }
 
@@ -239,23 +244,46 @@ class Metronome extends React.Component {
 
     this.setState(
       {
+        startTime: performance.now(), 
         beat: 0,
         playing: true,
       },
       () => {
-        this.props.onStart(this.state)
+        this.props.onStart(this.state);
+        this.startElapsedTimeUpdate();
       }
     )
   }
-
+  startElapsedTimeUpdate = () => {
+    if(this.state.playing == true)
+        this.elapsedTimeInterval = setInterval(() => {
+          const tempo = Number(this.state.tempo);
+          let preTime;
+          if(this.state.totalElapsedTimes.has(tempo)) {
+            preTime = this.state.totalElapsedTimes.get(tempo);
+          }
+          else{
+            preTime = 0;
+          }
+          const currentTime = preTime + Math.floor((performance.now() - this.state.startTime) / 1000);
+          const newElapsedTimes = new Map(this.state.elapsedTimes);
+          newElapsedTimes.set(tempo, currentTime)
+          this.setState({
+            elapsedTime: this.state.totalElapsedTime + Math.floor((performance.now() - this.state.startTime) / 1000), // update elapsedTime every second
+            elapsedTimes: newElapsedTimes,
+          });
+        }, 1000);
+  }
   stop = () => {
     this.timerWorker.postMessage({
       action: ACTION_STOP,
     })
-
+    clearInterval(this.elapsedTimeInterval); // stop updating
     this.setState(
       {
         playing: false,
+        totalElapsedTime: this.state.elapsedTime,
+        totalElapsedTimes: this.state.elapsedTimes
       },
       () => {
         this.props.onStop(this.state)
