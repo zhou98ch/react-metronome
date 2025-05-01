@@ -61,6 +61,8 @@ class App extends Component {
           beatsPerMeasure,
           playing,
           beat,
+          elapsedTime,
+          elapsedTimes,
           onPlay,
           onTempoChange,
         }) => (
@@ -86,6 +88,18 @@ class App extends Component {
               <TabularNums>
                 {beat}/{beatsPerMeasure}
               </TabularNums>
+
+              <TabularNums>
+                Total time: {elapsedTime}s
+              </TabularNums>
+
+              <div>
+                {[...elapsedTimes.entries()].map(([tempo, time]) => (
+                  <p key={tempo}>
+                    Tempo: {tempo}, Time: {time.toFixed(0)}s
+                  </p>
+                ))}
+              </div>
 
               <PlayButton onClick={onPlay}>
                 {playing ? <MdPause /> : <MdPlayArrow />}
