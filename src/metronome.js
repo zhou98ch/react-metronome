@@ -78,11 +78,6 @@ class Metronome extends React.Component {
       totalElapsedTime:0,
       elapsedTimes: new Map(),
       totalElapsedTimes: new Map(),
-      startTime: null,
-      elapsedTime:0,
-      totalElapsedTime:0,
-      elapsedTimes: new Map(),
-      totalElapsedTimes: new Map(),
     }
   }
 
@@ -255,8 +250,6 @@ class Metronome extends React.Component {
         // totalElapsedTime: this.state.totalElapsedTime + this.state.elapsedTime
       },
       () => {
-        this.props.onStart(this.state);
-        this.startElapsedTimeUpdate();
         this.props.onStart(this.state);
         this.startElapsedTimeUpdate();
       }
