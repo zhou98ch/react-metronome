@@ -74,7 +74,7 @@ function App() {
         const handleSendClick = () => {
           if (elapsedTimesRef.current !== lastSentElapsedTimesRef.current) {
             sendPracticeTime(elapsedTimes)
-            lastSentElapsedTimesRef.current = new Map(elapsedTimes)
+            lastSentElapsedTimesRef.current = elapsedTimesRef.current
           }
         }
 
