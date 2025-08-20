@@ -16,17 +16,20 @@ function App() {
     const elapsedTimesArray = Array.from(elapsedTimes.entries()).map(([bpm, duration]) => ({
       bpm,
       duration,
-    }))
-    const data = {
       musicId: musicId,
-      elapsedTimes: elapsedTimesArray,
-    }
-    fetch('/api/practice', {
+    }))
+    // const data = {
+    //   musicId: musicId,
+    //   elapsedTimes: elapsedTimesArray,
+    // }
+    
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080';
+    fetch(`${apiUrl}/api/practice/savePracticeRecord`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(elapsedTimesArray),
     }).then(response => {
       if (!response.ok) {
         console.error('Failed to send practice time')
